@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Data {
+    int dia; 
+    int mes; 
+    int ano; 
+} Data;
+
+typedef struct Registro {
+    char nome[100]; 
+    int idade; 
+    char rg[20]; 
+    Data* entrada; 
+} Registro;
+
+typedef struct ELista {
+    Registro* dados; 
+    struct ELista* proximo; 
+} ELista;
+
+typedef struct Lista {
+    ELista* inicio; 
+    int qtd; 
+} Lista;
+
+typedef struct EFila {
+    Registro* dados; 
+    struct EFila* proximo; 
+} EFila;
+
+typedef struct Fila {
+    EFila* head; 
+    EFila* tail; 
+    int qtd; 
+} Fila;
+
+typedef struct EABB {
+    Registro* dados; 
+    struct EABB* filhoEsq; 
+    struct EABB* filhoDir; 
+} EABB;
+
+typedef struct ABB {
+    EABB* raiz; 
+    int qtd; 
+} ABB;
