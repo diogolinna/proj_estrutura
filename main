@@ -46,3 +46,34 @@ typedef struct ABB {
     EABB* raiz; 
     int qtd; 
 } ABB;
+
+typedef struct Operacao {
+    int tipo;
+    Registro* paciente;
+    struct Operacao* proximo;
+} Operacao;
+
+typedef struct PilhaOperacao {
+    Operacao* topo;
+} PilhaOperacao;
+
+void iniciopilha(PilhaOperacao* pilha) {
+    pilha->topo = NULL;
+}
+
+// Commit 3 - feat: funções de inicialização
+void inicio_lista(Lista* lista) {
+    lista->inicio = NULL;
+    lista->qtd = 0;
+}
+
+void inicio_fila(Fila* fila) {
+    fila->head = NULL;
+    fila->tail = NULL;
+    fila->qtd = 0;
+}
+
+void inicioABB(ABB* arvore) {
+    arvore->raiz = NULL;
+    arvore->qtd = 0;
+}
