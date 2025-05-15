@@ -88,3 +88,29 @@ void empilharOperacao(PilhaOperacao* pilha, int tipo, Registro* paciente) {
     nova_operacao->proximo = pilha->topo;
     pilha->topo = nova_operacao;
 }
+
+Operacao* desempilhar_operacao(PilhaOperacao* pilha) {
+    if (pilha->topo == NULL) {
+        printf("Nenhuma operacao para desfazer.");
+        return NULL;
+    }
+    Operacao* operacao = pilha->topo;
+    pilha->topo = pilha->topo->proximo;
+    return operacao;
+}
+
+void limpar_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+int rg_existente(Lista* lista, const char* rg) {
+    ELista* atual = lista->inicio;
+    while (atual != NULL) {
+        if (strcmp(atual->dados->rg, rg) == 0) {
+            return 1;
+        }
+        atual = atual->proximo;
+    }
+    return 0;
+}
