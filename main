@@ -61,7 +61,6 @@ void iniciopilha(PilhaOperacao* pilha) {
     pilha->topo = NULL;
 }
 
-// Commit 3 - feat: funções de inicialização
 void inicio_lista(Lista* lista) {
     lista->inicio = NULL;
     lista->qtd = 0;
@@ -76,4 +75,16 @@ void inicio_fila(Fila* fila) {
 void inicioABB(ABB* arvore) {
     arvore->raiz = NULL;
     arvore->qtd = 0;
+}
+
+void empilharOperacao(PilhaOperacao* pilha, int tipo, Registro* paciente) {
+    Operacao* nova_operacao = (Operacao*)malloc(sizeof(Operacao));
+    if (nova_operacao == NULL) {
+        printf("Erro");
+        return;
+    }
+    nova_operacao->tipo = tipo;
+    nova_operacao->paciente = paciente;
+    nova_operacao->proximo = pilha->topo;
+    pilha->topo = nova_operacao;
 }
