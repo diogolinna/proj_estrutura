@@ -114,3 +114,28 @@ int rg_existente(Lista* lista, const char* rg) {
     }
     return 0;
 }
+
+EABB* inserir(EABB* raiz, Registro* dados) {
+    if (raiz == NULL) {
+        EABB* novoNo = (EABB*)malloc(sizeof(EABB));
+        if (novoNo == NULL) {
+            printf("Erro\n");
+            return NULL;
+        }
+        novoNo->dados = dados;
+        novoNo->filhoEsq = NULL;
+        novoNo->filhoDir = NULL;
+        return novoNo;
+    }
+    if (dados->entrada->ano < raiz->dados->entrada->ano) {
+        raiz->filhoEsq = inserir(raiz->filhoEsq, dados);
+    } else if (dados->entrada->ano > raiz->dados->entrada->ano) {
+        raiz->filhoDir = inserir(raiz->filhoDir, dados);
+    }
+    return raiz;
+}
+
+void inserir_pacienteABB(ABB* arvore, Registro* dados) {
+    arvore->raiz = inserir(arvore->raiz, dados);
+    arvore->qtd++;
+}
