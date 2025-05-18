@@ -139,3 +139,66 @@ void inserir_pacienteABB(ABB* arvore, Registro* dados) {
     arvore->raiz = inserir(arvore->raiz, dados);
     arvore->qtd++;
 }
+void cadastrar_novo_paciente(Lista* lista, ABB* arvore) {
+    Registro* p = (Registro*)malloc(sizeof(Registro));
+    if (p == NULL) {
+        printf("Erro.\n");
+        return;
+    }
+
+    printf("\nDigite o nome do paciente: ");
+    fgets(p->nome, sizeof(p->nome), stdin);
+    p->nome[strcspn(p->nome, "\n")] = '\0';
+
+    printf("Digite a idade do paciente: ");
+    scanf("%d", &p->idade);
+    limpar_buffer();
+
+    char rg[20];
+    while (1) {
+        printf("Digite o RG: ");
+        fgets(rg, sizeof(rg), stdin);
+        rg[strcspn(rg, "\n")] = '\0';
+
+        if (rg_existente(lista, rg)) {
+            printf("RG ja existe\n");
+        } else {
+            strncpy(p->rg, rg, sizeof(p->rg) - 1);
+            p->rg[sizeof(p->rg) - 1] = '\0';
+            break;
+        }
+    }
+
+    p->entrada = (Data*)malloc(sizeof(Data));
+    if (p->entrada == NULL) {
+        printf("Erro\n");
+        free(p);
+        return;
+    }
+
+    printf("Digite a data de entrada (dia, mes, ano): ");
+    if (scanf("%d %d %d", &p->entrada->dia, &p->entrada->mes, &p->entrada->ano) != 3) {
+        printf("Entrada de data errada\n");
+        free(p->entrada);
+        free(p);
+        limpar_buffer();
+        return;
+    }
+    limpar_buffer();
+
+    ELista* novoElemento = (ELista*)malloc(sizeof(ELista));
+    if (novoElemento == NULL) {
+        printf("Erro\n");
+        free(p->entrada);
+        free(p);
+        return;
+    }
+
+    novoElemento->dados = p;
+    novoElemento->proximo = lista->inicio;
+    lista->inicio = novoElemento;
+    lista->qtd++;
+
+    inserir_pacienteABB(arvore, p);
+    printf("Paciente %s cadastrado\n", p->nome);
+}
