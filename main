@@ -202,3 +202,34 @@ void cadastrar_novo_paciente(Lista* lista, ABB* arvore) {
     inserir_pacienteABB(arvore, p);
     printf("Paciente %s cadastrado\n", p->nome);
 }
+void exibir_ano(EABB* raiz) {
+    if (raiz != NULL) {
+        exibir_ano(raiz->filhoEsq);
+        printf("Nome: %s, Ano de Entrada: %d\n", raiz->dados->nome, raiz->dados->entrada->ano);
+        exibir_ano(raiz->filhoDir);
+    }
+}
+
+void exibir_mes(EABB* raiz) {
+    if (raiz != NULL) {
+        exibir_mes(raiz->filhoEsq);
+        printf("Nome: %s, Mes de Entrada: %d/%d\n", raiz->dados->nome, raiz->dados->entrada->mes, raiz->dados->entrada->ano);
+        exibir_mes(raiz->filhoDir);
+    }
+}
+
+void exibir_dia(EABB* raiz) {
+    if (raiz != NULL) {
+        exibir_dia(raiz->filhoEsq);
+        printf("Nome: %s, Data de Entrada: %02d/%02d/%04d\n", raiz->dados->nome, raiz->dados->entrada->dia, raiz->dados->entrada->mes, raiz->dados->entrada->ano);
+        exibir_dia(raiz->filhoDir);
+    }
+}
+
+void exibir_idade(EABB* raiz) {
+    if (raiz != NULL) {
+        exibir_idade(raiz->filhoEsq);
+        printf("Nome: %s, Idade: %d\n", raiz->dados->nome, raiz->dados->idade);
+        exibir_idade(raiz->filhoDir);
+    }
+}
