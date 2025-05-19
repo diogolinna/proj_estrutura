@@ -8,7 +8,6 @@ Criamos um sistema de gerenciamento de pacientes utilizando estruturas dinâmica
 Desenvolvedores:
 
 Nome: Henrique Bassan
-
 Ciclo: 4º Semestre
 Curso: Ciência da Computação
 Disciplina: Estrutura de Dados
