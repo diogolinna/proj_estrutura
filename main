@@ -393,3 +393,68 @@ void exibirFila(Fila* fila) {
         atual = atual->proximo;
     }
 }
+
+void salvar_dados(Lista* lista) {
+    FILE* arquivo = fopen("dados_pacientes.txt", "w");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo para salvar os dados.\n");
+        return;
+    }
+
+    ELista* atual = lista->inicio;
+    while (atual != NULL) {
+        Registro* p = atual->dados;
+        fprintf(arquivo, "%s,%d,%s,%d %d %d\n", p->nome, p->idade, p->rg, p->entrada->dia, p->entrada->mes, p->entrada->ano);
+        atual = atual->proximo;
+    }
+
+    fclose(arquivo);
+    printf("Dados salvos com sucesso.\n");
+}
+
+void carregar_dados(Lista* lista, ABB* arvore) {
+    FILE* arquivo = fopen("dados_pacientes.txt", "r");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo para carregar os dados.\n");
+        return;
+    }
+
+    char linha[256];
+    while (fgets(linha, sizeof(linha), arquivo)) {
+        Registro* p = (Registro*)malloc(sizeof(Registro));
+        if (p == NULL) {
+            printf("Erro ao alocar memoria para registro.\n");
+            fclose(arquivo);
+            return;
+        }
+
+        p->entrada = (Data*)malloc(sizeof(Data));
+        if (p->entrada == NULL) {
+            printf("Erro ao alocar memoria para data.\n");
+            free(p);
+            fclose(arquivo);
+            return;
+        }
+
+        sscanf(linha, "%[^,],%d,%[^,],%d %d %d", p->nome, &p->idade, p->rg, &p->entrada->dia, &p->entrada->mes, &p->entrada->ano);
+
+        ELista* novoElemento = (ELista*)malloc(sizeof(ELista));
+        if (novoElemento == NULL) {
+            printf("Erro ao alocar memoria para elemento da lista.\n");
+            free(p->entrada);
+            free(p);
+            fclose(arquivo);
+            return;
+        }
+
+        novoElemento->dados = p;
+        novoElemento->proximo = lista->inicio;
+        lista->inicio = novoElemento;
+        lista->qtd++;
+
+        inserir_pacienteABB(arvore, p);
+    }
+
+    fclose(arquivo);
+    printf("Dados carregados com sucesso.\n");
+}
