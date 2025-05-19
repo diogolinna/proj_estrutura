@@ -518,3 +518,164 @@ void desfazer_operacao(PilhaOperacao* pilha, Lista* lista, Fila* fila) {
     }
     free(operacao);
 }
+
+int main() {
+    Lista listaPacientes;
+    inicio_lista(&listaPacientes);
+
+    Fila filaAtendimento;
+    inicio_fila(&filaAtendimento);
+
+    ABB arvorePacientes;
+    inicioABB(&arvorePacientes);
+
+    PilhaOperacao pilhaOperacoes;
+    iniciopilha(&pilhaOperacoes);
+
+    int opcao;
+    while (1) {
+        menu_principal();
+        scanf("%d", &opcao);
+        limpar_buffer();
+
+        switch (opcao) {
+            case 1: {
+                int subOpcao;
+                while (1) {
+                    exibirmenu_cadastro();
+                    scanf("%d", &subOpcao);
+                    limpar_buffer();
+
+                    if (subOpcao == 0) break;
+
+                    switch (subOpcao) {
+                        case 1:
+                            cadastrar_novo_paciente(&listaPacientes, &arvorePacientes);
+                            empilharOperacao(&pilhaOperacoes, 1, listaPacientes.inicio->dados);
+                            break;
+                        case 2:
+                            consulta_paciente(&listaPacientes);
+                            break;
+                        case 3:
+                            exibir_pacientes_lista(&listaPacientes);
+                            break;
+                        case 4:
+                            atualizar_paciente(&listaPacientes);
+                            break;
+                        case 5:
+                            remover_paciente(&listaPacientes);
+                            break;
+                        default:
+                            printf("Opcao invalida. Tente novamente.\n");
+                    }
+                }
+                break;
+            }
+
+            case 2: {
+                int subOpcao;
+                while (1) {
+                    exibir_menu_atendimento();
+                    scanf("%d", &subOpcao);
+                    limpar_buffer();
+
+                    if (subOpcao == 0) break;
+
+                    switch (subOpcao) {
+                        case 1: {
+                            char rg[20];
+                            printf("\nDigite o RG do paciente que deseja enfileirar: ");
+                            fgets(rg, sizeof(rg), stdin);
+                            rg[strcspn(rg, "\n")] = '\0';
+
+                            ELista* atual = listaPacientes.inicio;
+                            while (atual != NULL) {
+                                if (strcmp(atual->dados->rg, rg) == 0) {
+                                    enfileira_paciente(&filaAtendimento, atual->dados);
+                                    empilharOperacao(&pilhaOperacoes, 2, atual->dados);
+                                    break;
+                                }
+                                atual = atual->proximo;
+                            }
+                            if (atual == NULL) {
+                                printf("Paciente com RG %s nao encontrado\n", rg);
+                            }
+                            break;
+                        }
+                        case 2:
+                            desenfileirar_paciente(&filaAtendimento);
+                            break;
+                        case 3:
+                            exibirFila(&filaAtendimento);
+                            break;
+                        default:
+                            printf("Invalido, tente novamente.\n");
+                    }
+                }
+                break;
+            }
+
+            case 3: {
+                int subOpcao;
+                while (1) {
+                    exibir_menu_pesquisa();
+                    scanf("%d", &subOpcao);
+                    limpar_buffer();
+
+                    if (subOpcao == 0) break;
+
+                    switch (subOpcao) {
+                        case 1:
+                            exibir_ano(arvorePacientes.raiz);
+                            break;
+                        case 2:
+                            exibir_mes(arvorePacientes.raiz);
+                            break;
+                        case 3:
+                            exibir_dia(arvorePacientes.raiz);
+                            break;
+                        case 4:
+                            exibir_idade(arvorePacientes.raiz);
+                            break;
+                        default:
+                            printf("Opcao invalida. Tente novamente.\n");
+                    }
+                }
+                break;
+            }
+
+            case 4:
+                desfazer_operacao(&pilhaOperacoes, &listaPacientes, &filaAtendimento);
+                break;
+
+            case 5:
+                sobre();
+                break;
+
+            case 6: {
+                int subOpcao;
+                printf("\n1. Carregar dados\n2. Salvar dados\nEscolha uma opcao: ");
+                scanf("%d", &subOpcao);
+                limpar_buffer();
+
+                if (subOpcao == 1) {
+                    carregar_dados(&listaPacientes, &arvorePacientes);
+                } else if (subOpcao == 2) {
+                    salvar_dados(&listaPacientes);
+                } else {
+                    printf("Opcao invalida. Tente novamente.\n");
+                }
+                break;
+            }
+
+            case 0:
+                printf("Saindo\n");
+                return 0;
+
+            default:
+                printf("Opcao invalida, tente novamente\n");
+        }
+    }
+
+    return 0;
+}
