@@ -310,3 +310,35 @@ void atualizar_paciente(Lista* lista) {
     }
     printf("Paciente com RG %s nao encontrado.\n", rg);
 }
+
+void remover_paciente(Lista* lista) {
+    if (lista->inicio == NULL) {
+        printf("Nenhum paciente cadastrado.\n");
+        return;
+    }
+    char rg[20];
+    printf("\nDigite o RG do paciente que quer remover: ");
+    fgets(rg, sizeof(rg), stdin);
+    rg[strcspn(rg, "\n")] = '\0';
+
+    ELista* atual = lista->inicio;
+    ELista* anterior = NULL;
+    while (atual != NULL) {
+        if (strcmp(atual->dados->rg, rg) == 0) {
+            if (anterior == NULL) {
+                lista->inicio = atual->proximo;
+            } else {
+                anterior->proximo = atual->proximo;
+            }
+            printf("Paciente %s removido\n", atual->dados->nome);
+            free(atual->dados->entrada);
+            free(atual->dados);
+            free(atual);
+            lista->qtd--;
+            return;
+        }
+        anterior = atual;
+        atual = atual->proximo;
+    }
+    printf("Paciente com RG %s nao encontrado.\n", rg);
+}
