@@ -458,3 +458,63 @@ void carregar_dados(Lista* lista, ABB* arvore) {
     fclose(arquivo);
     printf("Dados carregados com sucesso.\n");
 }
+
+void desfazer_operacao(PilhaOperacao* pilha, Lista* lista, Fila* fila) {
+    Operacao* operacao = desempilhar_operacao(pilha);
+    if (operacao == NULL) return;
+
+    switch (operacao->tipo) {
+        case 1: {
+            ELista* atual = lista->inicio;
+            ELista* anterior = NULL;
+            while (atual != NULL) {
+                if (atual->dados == operacao->paciente) {
+                    if (anterior == NULL) {
+                        lista->inicio = atual->proximo;
+                    } else {
+                        anterior->proximo = atual->proximo;
+                    }
+                    printf("Cadastro retirado %s\n", operacao->paciente->nome);
+                    free(atual->dados->entrada);
+                    free(atual->dados);
+                    free(atual);
+                    lista->qtd--;
+                    break;
+                }
+                anterior = atual;
+                atual = atual->proximo;
+            }
+            break;
+        }
+        case 2: {
+            if (fila->tail == NULL) {
+                printf("Erro ao desfazer enfileiramento\n");
+                break;
+            }
+            EFila* atual = fila->head;
+            EFila* anterior = NULL;
+            while (atual != NULL) {
+                if (atual->dados == operacao->paciente) {
+                    if (anterior == NULL) {
+                        fila->head = atual->proximo;
+                    } else {
+                        anterior->proximo = atual->proximo;
+                    }
+                    if (atual == fila->tail) {
+                        fila->tail = anterior;
+                    }
+                    printf("Paciente tirado da fila %s\n", operacao->paciente->nome);
+                    free(atual);
+                    fila->qtd--;
+                    break;
+                }
+                anterior = atual;
+                atual = atual->proximo;
+            }
+            break;
+        }
+        default:
+            printf("operacao nao encontrada.\n");
+    }
+    free(operacao);
+}
