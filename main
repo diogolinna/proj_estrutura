@@ -342,3 +342,54 @@ void remover_paciente(Lista* lista) {
     }
     printf("Paciente com RG %s nao encontrado.\n", rg);
 }
+void enfileira_paciente(Fila* fila, Registro* paciente) {
+    EFila* novoElemento = (EFila*)malloc(sizeof(EFila));
+    if (novoElemento == NULL) {
+        printf("Erro\n");
+        return;
+    }
+    novoElemento->dados = paciente;
+    novoElemento->proximo = NULL;
+
+    if (fila->tail == NULL) {
+        fila->head = novoElemento;
+    } else {
+        fila->tail->proximo = novoElemento;
+    }
+    fila->tail = novoElemento;
+    fila->qtd++;
+
+    printf("Paciente %s enfileirado para atendimento\n", paciente->nome);
+}
+
+void desenfileirar_paciente(Fila* fila) {
+    if (fila->head == NULL) {
+        printf("Nenhum paciente na fila de atendimento\n");
+        return;
+    }
+
+    EFila* removido = fila->head;
+    fila->head = fila->head->proximo;
+    if (fila->head == NULL) {
+        fila->tail = NULL;
+    }
+    printf("Paciente %s atendido e removido da fila\n", removido->dados->nome);
+    free(removido);
+    fila->qtd--;
+}
+
+void exibirFila(Fila* fila) {
+    if (fila->head == NULL) {
+        printf("Nenhum paciente na fila de atendimento\n");
+        return;
+    }
+
+    EFila* atual = fila->head;
+    printf("\nPacientes na fila de atendimento (Total: %d):\n", fila->qtd);
+    while (atual != NULL) {
+        Registro* reg = atual->dados;
+        printf("Nome: %s, Idade: %d, RG: %s, Data de Entrada: %02d/%02d/%04d\n",
+               reg->nome, reg->idade, reg->rg, reg->entrada->dia, reg->entrada->mes, reg->entrada->ano);
+        atual = atual->proximo;
+    }
+}
