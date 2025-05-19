@@ -233,3 +233,80 @@ void exibir_idade(EABB* raiz) {
         exibir_idade(raiz->filhoDir);
     }
 }
+
+void consulta_paciente(Lista* lista) {
+    if (lista->inicio == NULL) {
+        printf("Nenhum paciente cadastrado\n");
+        return;
+    }
+
+    char rg[20];
+    printf("\nDigite o RG do paciente: ");
+    fgets(rg, sizeof(rg), stdin);
+    rg[strcspn(rg, "\n")] = '\0';
+
+    ELista* atual = lista->inicio;
+    while (atual != NULL) {
+        if (strcmp(atual->dados->rg, rg) == 0) {
+            Registro* reg = atual->dados;
+            printf("\nPaciente encontrado:\n");
+            printf("Nome: %s, Idade: %d, RG: %s, Data de Entrada: %02d/%02d/%04d\n",
+                   reg->nome, reg->idade, reg->rg, reg->entrada->dia, reg->entrada->mes, reg->entrada->ano);
+            return;
+        }
+        atual = atual->proximo;
+    }
+    printf("Paciente com RG %s nao encontrado.\n", rg);
+}
+
+void exibir_pacientes_lista(Lista* lista) {
+    if (lista->inicio == NULL) {
+        printf("Nenhum paciente cadastrado.\n");
+        return;
+    }
+
+    ELista* atual = lista->inicio;
+    printf("\nPacientes cadastrados (Total: %d):\n", lista->qtd);
+    while (atual != NULL) {
+        Registro* reg = atual->dados;
+        printf("Nome: %s, Idade: %d, RG: %s, Data de Entrada: %02d/%02d/%04d\n",
+               reg->nome, reg->idade, reg->rg, reg->entrada->dia, reg->entrada->mes, reg->entrada->ano);
+        atual = atual->proximo;
+    }
+}
+
+void atualizar_paciente(Lista* lista) {
+    if (lista->inicio == NULL) {
+        printf("Nenhum paciente cadastrado.\n");
+        return;
+    }
+
+    char rg[20];
+    printf("\nDigite o RG do paciente que deseja atualizar: ");
+    fgets(rg, sizeof(rg), stdin);
+    rg[strcspn(rg, "\n")] = '\0';
+
+    ELista* atual = lista->inicio;
+    while (atual != NULL) {
+        if (strcmp(atual->dados->rg, rg) == 0) {
+            Registro* reg = atual->dados;
+            printf("\nAtualizando dados do paciente %s:\n", reg->nome);
+            printf("Digite o novo nome do paciente: ");
+            fgets(reg->nome, sizeof(reg->nome), stdin);
+            reg->nome[strcspn(reg->nome, "\n")] = '\0';
+
+            printf("Digite a nova idade do paciente: ");
+            scanf("%d", &reg->idade);
+            limpar_buffer();
+
+            printf("Digite a nova data de entrada (dia, mes, ano): ");
+            scanf("%d %d %d", &reg->entrada->dia, &reg->entrada->mes, &reg->entrada->ano);
+            limpar_buffer();
+
+            printf("Dados do paciente atualizados com sucesso!\n");
+            return;
+        }
+        atual = atual->proximo;
+    }
+    printf("Paciente com RG %s nao encontrado.\n", rg);
+}
