@@ -12,9 +12,11 @@ Ciclo: 4º Semestre
 Curso: Ciência da Computação
 Disciplina: Estrutura de Dados
 Data: 19/05/2025
+R.A.: 22.223.083-1
 
 Nome: Diogo Santos Linna
 Ciclo: 5º Semestre
 Curso: Ciência da Computação
 Disciplina: Estrutura de Dados
 Data: 19/05/2025
+R.A.: 22.125.069-9
